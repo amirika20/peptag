@@ -148,11 +148,18 @@ For each raw TSV file, `clean_psm()` performs the following:
 
 `merge_libraries()` concatenates all per-library curated CSVs (excluding `test`) into a single file, then:
 
-1. **SMILES generation:** calls `peptide_to_smiles()` from `data_processing.py` for every unique sequence. SMILES include:
-   - Explicit `[C@@H]` (S config) for L-amino acids at the alpha-carbon.
-   - Explicit `[C@H]` (R config) for D-Phenylalanine (`f`).
+1. **SMILES generation:** calls `peptide_to_smiles()` from `data_processing.py` for every unique sequence. SMILES are generated at the **pH 3 protonation state** matching the RP-HPLC mobile phase (water + 0.1% formic acid, pH ≈ 3). Protonation assignments:
+   - N-terminal alpha-amine → `[NH3+]` (primary) or `[NH2+]` (Proline, secondary). pKa ~8 → fully protonated at pH 3.
+   - Lys ε-amine → `[NH3+]`. pKa ~10.5 → fully protonated at pH 3.
+   - Arg guanidinium → `[NH2+]=`. pKa ~12.5 → fully protonated at pH 3.
+   - His imidazolium → `[nH+]`. pKa ~6 → fully protonated at pH 3.
+   - Asp/Glu side chain carboxyl → COOH (neutral in SMILES). pKa ~3.7/4.1 → predominantly protonated at pH 3.
+   - C-terminus carboxyl → COOH (neutral in SMILES). pKa ~3.1.
+   - Cys thiol, Tyr phenol, Ser/Thr hydroxyl → already neutral forms, unchanged.
+   - Peptide bond amides → not protonated (amide pKa << 0), written as `N`.
+   - Explicit `[C@@H]` (S config) for L-amino acids at the alpha-carbon; `[C@H]` (R config) for D-Phenylalanine (`f`).
    - Special handling for Glycine (no chiral centre), Proline (pyrrolidine ring), Isoleucine (two chiral centres), and Threonine (two chiral centres).
-   - K-terminus Phe tag encoded as an amide branch on the Lys side chain.
+   - K-terminus Phe tag encoded as an amide branch on the Lys side chain; free alpha-amine of the tag is `[NH3+]`.
 2. **Cross-library deduplication:** if the same sequence appears in multiple libraries, rows are collapsed by averaging `B` and `M`, taking the mode of `Z`.
 3. Adds a `Length` column (sequence length).
 
@@ -192,7 +199,7 @@ The resulting `stereo_pairs.csv` enables direct measurement of the **retention s
 | `M` | float | Observed monoisotopic mass (Da) from the mass spectrometer. |
 | `Z` | int | Precursor ion charge state. |
 | `Length` | int | Sequence length (number of residues). |
-| `SMILES` | string | Isomeric SMILES with explicit stereochemistry at every alpha-carbon. |
+| `SMILES` | string | Isomeric SMILES with explicit stereochemistry at every alpha-carbon, protonated at pH 3 (`[NH3+]` N-terminus, `[NH3+]` Lys, `[NH2+]=` Arg, `[nH+]` His). |
 
 ### `stereo_pairs.csv`
 

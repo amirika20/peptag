@@ -8,6 +8,18 @@ Two responsibilities:
      non-proteinogenic D-Phenylalanine encoded as lowercase 'f') into an isomeric
      SMILES string with explicit alpha-carbon stereochemistry.
 
+     SMILES are generated at the **pH 3 protonation state** matching the RP-HPLC
+     mobile phase conditions (solvent A: water + 0.1% formic acid, pH ≈ 3).
+     At pH 3 the following groups are protonated:
+       - N-terminus alpha-amine  → [NH3+]   (pKa ~8)
+       - Lys epsilon-amine       → [NH3+]   (pKa ~10.5)
+       - Arg guanidinium         → [NH2+]=  (pKa ~12.5)
+       - His imidazolium         → [nH+]    (pKa ~6)
+       - Asp/Glu carboxyl        → COOH     (pKa ~3.7/4.1; neutral form in SMILES)
+       - C-terminus carboxyl     → COOH     (neutral form in SMILES)
+     Groups that are already neutral and unchanged: Cys thiol (–SH), Tyr phenol
+     (–OH), Ser/Thr hydroxyl (–OH), peptide bond amides (–CO–NH–).
+
   2. **PSM cleaning** – read a raw PSM (peptide-spectrum match) TSV exported from
      a database search engine (FragPipe / MSFragger), apply quality filters, convert
      raw retention time to %B (% acetonitrile at elution), and write a clean CSV.
@@ -29,23 +41,31 @@ from pathlib import Path
 #   backbone-N  →  alpha-C  →  side-chain  →  backbone-C(=O)
 # so that the @/@@ stereo tokens produce the correct CIP configuration.
 # Glycine and Proline are NOT in this dict; they are handled separately.
+#
+# Protonation state: pH 3 (RP-HPLC conditions).
+#   K  → epsilon-NH3+   ([NH3+], pKa ~10.5 → fully protonated at pH 3)
+#   R  → guanidinium    ([NH2+]=, pKa ~12.5 → fully protonated at pH 3)
+#   H  → imidazolium    ([nH+], pKa ~6 → fully protonated at pH 3)
+#   D/E → carboxylic acid (COOH neutral, pKa ~3.7/4.1 → mostly protonated at pH 3)
+#   C  → thiol (–SH, neutral, pKa ~8.3 → protonated at pH 3)
+#   Y  → phenol (–OH, neutral, pKa ~10.1 → protonated at pH 3)
 _SIDE_CHAINS = {
     'A': 'C',
     'C': 'CS',
     'D': 'CC(=O)O',
     'E': 'CCC(=O)O',
     'F': 'Cc1ccccc1',
-    'f': 'Cc1ccccc1',          # D-Phe — same side chain, D config at alpha-C
-    'H': 'Cc1c[nH]cn1',
-    'I': '[C@@H](CC)C',        # L-Ile: beta-C is (S)
-    'K': 'CCCCN',
+    'f': 'Cc1ccccc1',           # D-Phe — same side chain, D config at alpha-C
+    'H': 'Cc1c[nH]c[nH+]1',    # imidazolium: N-delta neutral, N-epsilon protonated
+    'I': '[C@@H](CC)C',         # L-Ile: beta-C is (S)
+    'K': 'CCCC[NH3+]',          # epsilon-ammonium (protonated at pH 3)
     'L': 'CC(C)C',
     'M': 'CCSC',
     'N': 'CC(=O)N',
     'Q': 'CCC(=O)N',
-    'R': 'CCCNC(=N)N',
+    'R': 'CCCNC(=[NH2+])N',     # guanidinium (protonated at pH 3)
     'S': 'CO',
-    'T': '[C@@H](O)C',         # L-Thr: beta-C is (R)
+    'T': '[C@@H](O)C',          # L-Thr: beta-C is (R)
     'V': 'C(C)C',
     'W': 'Cc1c[nH]c2ccccc12',
     'Y': 'Cc1ccc(O)cc1',
@@ -62,7 +82,7 @@ def _alpha_c(aa):
 
 
 def peptide_to_smiles(sequence: str) -> str:
-    """Build a SMILES string with chirality centres for a peptide sequence.
+    """Build an isomeric SMILES at pH 3 protonation state for a peptide sequence.
 
     Conventions used throughout this codebase:
       - Uppercase letters  = L-amino acids
@@ -71,8 +91,16 @@ def peptide_to_smiles(sequence: str) -> str:
         (free alpha-COOH); the trailing f/F is attached as an amide to the
         epsilon-amine of K's side chain.
       - Sequence ending in 'K' (no trailing f/F) → K-term LF: normal K at
-        C-terminus with free epsilon-NH2.
+        C-terminus with free epsilon-NH3+.
       - Sequence ending in 'R' → R-term: linear peptide, free COOH at R.
+
+    Protonation (pH 3, matching RP-HPLC mobile phase):
+      - N-terminus alpha-amine → [NH3+]
+      - Lys epsilon-amine      → [NH3+]
+      - Arg guanidinium        → [NH2+]=
+      - His imidazolium        → [nH+]
+      - C-terminus             → COOH (already neutral in SMILES notation)
+      - Asp / Glu              → COOH (already neutral in SMILES notation)
     """
     # Determine K-term Phe topology
     k_side = None
@@ -83,11 +111,12 @@ def peptide_to_smiles(sequence: str) -> str:
             # The tag is read C→N (from-atom = C=O), which inverts @/@@
             # compared to the standard N→C backbone direction.
             # Verified: C(=O)[C@@H](Cc1ccccc1)N → from CIP, 1→2→3 CW = R = D-Phe.
-            k_side = 'CCCCNC(=O)[C@@H](Cc1ccccc1)N'
+            # Terminal amine of the Phe tag is [NH3+] at pH 3.
+            k_side = 'CCCCNC(=O)[C@@H](Cc1ccccc1)[NH3+]'
         else:
             # L-Phe tag (S config at alpha-C).
             # Same reversal: C(=O)[C@H](Cc1ccccc1)N → S = L-Phe.
-            k_side = 'CCCCNC(=O)[C@H](Cc1ccccc1)N'
+            k_side = 'CCCCNC(=O)[C@H](Cc1ccccc1)[NH3+]'
         core = sequence[:-1]   # drop the trailing Phe tag; K is now last
     else:
         core = sequence
@@ -96,26 +125,39 @@ def peptide_to_smiles(sequence: str) -> str:
 
 
 def _build_backbone_smiles(sequence: str, k_side: str | None) -> str:
-    """Assemble backbone SMILES from N-terminus to C-terminus."""
+    """Assemble backbone SMILES from N-terminus to C-terminus at pH 3.
+
+    The N-terminal nitrogen is protonated:
+      - Primary amine (all residues except Pro): [NH3+]
+      - Secondary amine (Pro at N-terminus):     [NH2+]
+    Internal backbone amide nitrogens are NOT protonated (peptide bond pKa << 0).
+    """
     n = len(sequence)
     parts = []
 
     for i, aa in enumerate(sequence):
+        is_first = (i == 0)
         is_last = (i == n - 1)
         cterm = 'O' if is_last else ''   # append to C(=O) → C(=O)O at C-terminus
 
         if aa == 'G':
-            # Glycine: no side chain, alpha-C is CH2 (no chirality)
-            parts.append(f'NCC(=O){cterm}')
+            # Glycine: no side chain, alpha-C is CH2 (no chirality).
+            # N-terminus → [NH3+]; internal amide → N.
+            nterm = '[NH3+]' if is_first else 'N'
+            parts.append(f'{nterm}CC(=O){cterm}')
 
         elif aa == 'P':
             # Proline: pyrrolidine ring fuses the backbone N into the side chain.
             # N1 opens/closes the ring; [C@@H]1 is the alpha-C (L-Pro = S).
-            # The backbone N connects to the previous C=O automatically in SMILES.
-            parts.append(f'N1CCC[C@@H]1C(=O){cterm}')
+            # At N-terminus, Pro N is a secondary amine → [NH2+] when protonated.
+            # In mid-chain, Pro N is a tertiary amide (no free H, stays as N).
+            nterm = '[NH2+]' if is_first else 'N'
+            parts.append(f'{nterm}1CCC[C@@H]1C(=O){cterm}')
 
         else:
             ac = _alpha_c(aa)
+            # N-terminus → [NH3+]; internal amide → N
+            nterm = '[NH3+]' if is_first else 'N'
 
             # Choose side chain: K at C-terminus gets optional Phe tag
             if aa == 'K' and is_last and k_side is not None:
@@ -123,7 +165,7 @@ def _build_backbone_smiles(sequence: str, k_side: str | None) -> str:
             else:
                 sc = _SIDE_CHAINS[aa]
 
-            parts.append(f'N{ac}({sc})C(=O){cterm}')
+            parts.append(f'{nterm}{ac}({sc})C(=O){cterm}')
 
     return ''.join(parts)
 
