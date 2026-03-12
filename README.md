@@ -175,8 +175,9 @@ This guarantees that every combination of terminal type, tagging variant, and le
 - Start from every D-Phe sequence in `test.csv`.
 - Generate the putative L-Phe counterpart by replacing all `f` → `F`.
 - Keep only pairs where both members exist in the dataset.
+- **Discard pairs where `|B_f − B_F| < 1.0 %B`** — a difference smaller than 1 %B is within experimental noise and does not represent a reliable stereochemical effect on retention.
 
-The resulting `stereo_pairs.csv` enables direct measurement of the **retention shift induced by phenylalanine stereoinversion**.
+The resulting `stereo_pairs.csv` enables direct measurement of the **retention shift induced by phenylalanine stereoinversion**. The `min_delta_b` threshold (default 1.0 %B) can be adjusted when calling `make_stereo_pairs()` directly.
 
 ---
 
@@ -195,12 +196,15 @@ The resulting `stereo_pairs.csv` enables direct measurement of the **retention s
 
 ### `stereo_pairs.csv`
 
+Only pairs with `|B_f − B_F| ≥ 1.0 %B` are included (pairs below this threshold are considered within experimental noise).
+
 | Column | Type | Description |
 |---|---|---|
 | `Sequence_f` | string | Peptide sequence containing D-Phe (`f`). |
 | `Sequence_F` | string | Same sequence with all `f` replaced by `F` (L-Phe counterpart). |
 | `B_f` | float | Elution %B for the D-Phe version. |
 | `B_F` | float | Elution %B for the L-Phe version. |
+| `delta_B` | float | Signed retention shift: `B_f − B_F`. Positive = D-Phe elutes later than L-Phe. |
 
 ---
 
