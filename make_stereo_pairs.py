@@ -13,6 +13,8 @@ effect on chromatographic behaviour.
 Output columns:
     Sequence_f  – peptide sequence with D-Phe (f)
     Sequence_F  – peptide sequence with L-Phe (F)
+    SMILES_f    – SMILES string for the D-Phe version
+    SMILES_F    – SMILES string for the L-Phe version
     B_f         – %B at elution for the D-Phe version
     B_F         – %B at elution for the L-Phe version
     delta_B     – signed difference B_f − B_F (positive = D-Phe elutes later)
@@ -39,11 +41,12 @@ def make_stereo_pairs(
 
     Returns
     -------
-    pd.DataFrame with columns: Sequence_f, Sequence_F, B_f, B_F, delta_B.
+    pd.DataFrame with columns: Sequence_f, Sequence_F, SMILES_f, SMILES_F, B_f, B_F, delta_B.
     """
     df = pd.read_csv(input_path)
 
     b_map = df.set_index("Peptide")["B"].to_dict()
+    smiles_map = df.set_index("Peptide")["SMILES"].to_dict()
 
     # Start from the D-Phe rows and look up the L-Phe counterpart
     f_rows = df[df["Peptide"].str.contains("f", regex=False)].copy()
@@ -51,16 +54,18 @@ def make_stereo_pairs(
 
     # Keep only pairs where the L-Phe counterpart exists in the dataset
     mask = f_rows["counterpart"].isin(b_map)
-    pairs = f_rows[mask][["Peptide", "B", "counterpart"]].copy()
+    pairs = f_rows[mask][["Peptide", "SMILES", "B", "counterpart"]].copy()
     pairs["B_F"] = pairs["counterpart"].map(b_map)
+    pairs["SMILES_F"] = pairs["counterpart"].map(smiles_map)
 
     pairs = pairs.rename(columns={
         "Peptide": "Sequence_f",
+        "SMILES":  "SMILES_f",
         "B":       "B_f",
         "counterpart": "Sequence_F",
     })
 
-    pairs = pairs[["Sequence_f", "Sequence_F", "B_f", "B_F"]]
+    pairs = pairs[["Sequence_f", "Sequence_F", "SMILES_f", "SMILES_F", "B_f", "B_F"]]
 
     # Compute signed retention shift: positive means D-Phe elutes later than L-Phe
     pairs["delta_B"] = pairs["B_f"] - pairs["B_F"]
