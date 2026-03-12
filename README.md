@@ -92,13 +92,18 @@ Peptides were separated by RP-HPLC using a C18 column and identified by tandem m
 
 ### HPLC Gradients
 
-Three acetonitrile gradient methods were used across libraries. Raw retention times (in seconds) are converted to **%B at elution** — the percentage of acetonitrile in the mobile phase at the moment of peptide elution — using a piecewise-linear interpolation that accounts for the column dead volume (3.257 min):
+Three acetonitrile gradient methods were used across libraries. Raw retention times (in seconds) are converted to **%B at elution** — the percentage of acetonitrile (solvent B) in the mobile phase at the moment of peptide elution — using a piecewise-linear interpolation that accounts for the column dead volume (3.257 min).
 
-| Method | Used for | Gradient (time min → %B) |
-|---|---|---|
-| method_1 | 6mer, 9mer | 0→6, 10→11, 40→21, 55→31, 60→61 |
-| method_2 | 12mer; 15mer LF | 0→6, 10→11, 40→21, 55→31, 70→91 |
-| method_3 | all others | 0→6, 10→11, 40→21, 55→31, 70→91, 80→91 |
+**Solvent A:** water + 0.1% formic acid
+**Solvent B:** acetonitrile + 0.1% formic acid
+
+| Method | Used for | Time (min) | %B |
+|---|---|---|---|
+| method_1 | 6mer, 9mer | 0 → 10 → 40 → 55 → 60 | 6 → 11 → 21 → 31 → 61 |
+| method_2 | 12mer, 15mer-LF | 0 → 10 → 40 → 55 → 70 | 6 → 11 → 21 → 31 → 91 |
+| method_3 | all others | 0 → 10 → 40 → 55 → 70 → 80 | 6 → 11 → 21 → 31 → 91 → 91 |
+
+All three methods share the same initial ramp (6→31 %B over 0–55 min) and differ only in how far the gradient extends at the high-%B end. Between timepoints the gradient is linear; the plateau at 91 %B in method_3 (70–80 min) flushes late-eluting hydrophobic peptides before re-equilibration.
 
 Converting to %B makes retention values comparable across runs recorded under different gradient programmes.
 
