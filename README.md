@@ -39,7 +39,7 @@ Predicting peptide retention time is a core problem in proteomics and peptidomic
 
 | Split | File | Rows |
 |---|---|---|
-| Full merged | `curated_data/merged.csv` | 46 062 |
+| Train + Val (trainval) | `curated_data/trainval.csv` | 46 062 |
 | Train (90 %) | `curated_data/train.csv` | 41 455 |
 | Validation (10 %) | `curated_data/val.csv` | 4 607 |
 | Test (held-out library) | `curated_data/test.csv` | 2 726 |
@@ -122,7 +122,7 @@ curated_data/
   <library>/*.csv
         │
         ▼  merge_data.py  (merge_libraries)
-curated_data/merged.csv   ←── train+val pool
+curated_data/trainval.csv ←── train+val pool
 curated_data/test.csv     ←── held-out test pool
         │
         ├─▶  split_data.py  →  train.csv, val.csv
@@ -167,7 +167,7 @@ For each raw TSV file, `clean_psm()` performs the following:
 
 ### Step 3 — `split_data.py`: Stratified Train/Val Split
 
-`split_data()` splits `merged.csv` into `train.csv` (90 %) and `val.csv` (10 %) using a **stratified split**. The stratification key is the combination of:
+`split_data()` splits `trainval.csv` into `train.csv` (90 %) and `val.csv` (10 %) using a **stratified split**. The stratification key is the combination of:
 
 - **Terminal type:** `K` or `R`.
 - **Phe type:** `D` (contains `f`), `L` (starts with `F`), or `LF` (neither).
@@ -190,7 +190,7 @@ The resulting `stereo_pairs.csv` enables direct measurement of the **retention s
 
 ## Data Format
 
-### `merged.csv` / `train.csv` / `val.csv` / `test.csv`
+### `trainval.csv` / `train.csv` / `val.csv` / `test.csv`
 
 | Column | Type | Description |
 |---|---|---|
@@ -318,7 +318,7 @@ peptag/
 │
 ├── curated_data/               # Processed outputs
 │   ├── <library>/*.csv         # Per-library curated CSVs (intermediate)
-│   ├── merged.csv              # All train+val peptides (deduplicated, with SMILES)
+│   ├── trainval.csv            # All train+val peptides (deduplicated, with SMILES)
 │   ├── train.csv               # 90% stratified training split
 │   ├── val.csv                 # 10% stratified validation split
 │   ├── test.csv                # Held-out test set (independent library)

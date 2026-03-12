@@ -14,7 +14,7 @@ Run this script after data_processing.py has populated curated_data/:
     python merge_data.py
 
 Two output files are produced:
-  curated_data/merged.csv  – train + val pool (all libraries except 'test')
+  curated_data/trainval.csv  – train + val pool (all libraries except 'test')
   curated_data/test.csv    – held-out benchmark (only the 'test' library)
 """
 
@@ -126,7 +126,7 @@ def merge_libraries(
 if __name__ == "__main__":
     merge_libraries(
         curated_path="curated_data",
-        output_path="curated_data/merged.csv",
+        output_path="curated_data/trainval.csv",
     )
     merge_libraries(
         curated_path="curated_data",

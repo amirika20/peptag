@@ -1,7 +1,7 @@
 """
 split_data.py
 =============
-Split merged.csv into stratified train and validation sets.
+Split trainval.csv into stratified train and validation sets.
 
 Stratification key: (terminal_type, phe_type, length)
   - terminal_type : 'K' if the peptide ends in K / Kf / KF (Lys C-terminus)
@@ -60,7 +60,7 @@ def split_data(
 
     Parameters
     ----------
-    input_path   : path to merged.csv (or any file with a 'Peptide' column)
+    input_path   : path to trainval.csv (or any file with a 'Peptide' column)
     train_path   : output path for the training set
     val_path     : output path for the validation set
     val_fraction : fraction of data to use for validation (default 0.1 = 10 %)
@@ -113,7 +113,7 @@ def split_data(
 
 if __name__ == "__main__":
     split_data(
-        input_path="curated_data/merged.csv",
+        input_path="curated_data/trainval.csv",
         train_path="curated_data/train.csv",
         val_path="curated_data/val.csv",
         val_fraction=0.1,
