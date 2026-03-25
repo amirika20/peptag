@@ -1,14 +1,15 @@
 """
 Upload peptag datasets to Hugging Face Hub.
 
-Loads trainval, stereo_pairs, tag_pairs, test, train, and val CSVs from curated_data/.
+Loads trainval, stereo_pairs, tag_pairs, substitution_pairs, test, train, and val CSVs from curated_data/.
 
-Because stereo_pairs and tag_pairs have different columns from the other splits,
+Because stereo_pairs, tag_pairs, and substitution_pairs have different columns from the other splits,
 each group is pushed as a separate named config (subset) on the same repo:
 
-  - config "peptag"        → train / val / test / trainval splits
-  - config "stereo_pairs"  → stereo_pairs split
-  - config "tag_pairs"     → tag_pairs split
+  - config "peptag"              → train / val / test / trainval splits
+  - config "stereo_pairs"        → stereo_pairs split
+  - config "tag_pairs"           → tag_pairs split
+  - config "substitution_pairs"  → substitution_pairs split
 """
 
 import pandas as pd
@@ -55,5 +56,13 @@ if __name__ == "__main__":
     })
     print(f"\nPushing config 'tag_pairs' to {REPO_ID} ...")
     tag_ds.push_to_hub(REPO_ID, config_name="tag_pairs", private=False)
+
+    # --- config: substitution_pairs (different schema) ---
+    print("\nLoading substitution pairs ...")
+    substitution_ds = DatasetDict({
+        "substitution_pairs": load_csv(f"{data_dir}/substitution_pairs.csv"),
+    })
+    print(f"\nPushing config 'substitution_pairs' to {REPO_ID} ...")
+    substitution_ds.push_to_hub(REPO_ID, config_name="substitution_pairs", private=False)
 
     print("\nDone.")
