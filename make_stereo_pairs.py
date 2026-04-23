@@ -95,3 +95,9 @@ if __name__ == "__main__":
         output_path="curated_data/stereo_pairs.csv",
         min_delta_b=1.0,
     )
+    print()
+    make_stereo_pairs(
+        input_path="curated_data/trainval.csv",
+        output_path="curated_data/stereo_pairs_trainval.csv",
+        min_delta_b=1.0,
+    )

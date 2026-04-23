@@ -12,20 +12,20 @@ tags:
   - cheminformatics
   - SMILES
   - stereochemistry
-pretty_name: PepTag — Peptide Retention Time Dataset
+pretty_name: StereoPep — Peptide Retention Time Dataset
 size_categories:
   - 10K<n<100K
 ---
 
-# PepTag — Peptide Reversed-Phase HPLC Retention Time Dataset
+# StereoPep — Peptide Reversed-Phase HPLC Retention Time Dataset
 
-PepTag is a curated dataset of **~46 000 unique synthetic peptides** with experimentally measured reversed-phase HPLC (RP-HPLC) retention times, expressed as the percentage of organic modifier (acetonitrile, %B) at elution. The dataset is designed for training and benchmarking **retention-time prediction models** and includes full SMILES with chirality centres, enabling cheminformatics and graph-neural-network approaches.
+StereoPep is a curated dataset of **~46 000 unique synthetic peptides** with experimentally measured reversed-phase HPLC (RP-HPLC) retention times, expressed as the percentage of organic modifier (acetonitrile, %B) at elution. The dataset is designed for training and benchmarking **retention-time prediction models** and includes full SMILES with chirality centres, enabling cheminformatics and graph-neural-network approaches.
 
 ---
 
 ## Motivation
 
-Predicting peptide retention time is a core problem in proteomics and peptidomics. Accurate RT prediction aids targeted mass-spectrometry workflows, library searching, and the design of synthetic peptide libraries. Most public RT datasets cover only standard L-amino-acid sequences of a single length. PepTag extends the landscape by including:
+Predicting peptide retention time is a core problem in proteomics and peptidomics. Accurate RT prediction aids targeted mass-spectrometry workflows, library searching, and the design of synthetic peptide libraries. Most public RT datasets cover only standard L-amino-acid sequences of a single length. StereoPep extends the landscape by including:
 
 - Peptides of **6 – 15 residues** and variable-length libraries.
 - Both **K-terminus** (Lys C-terminus) and **R-terminus** (Arg C-terminus) scaffolds.
@@ -264,7 +264,7 @@ print(subset.head())
 ```python
 from datasets import load_dataset
 
-ds = load_dataset("amirika20/peptag")
+ds = load_dataset("amirka20/StereoPep")
 train = ds["train"].to_pandas()
 ```
 
@@ -301,7 +301,7 @@ python make_stereo_pairs.py
 ## Repository Structure
 
 ```
-peptag/
+StereoPep-Curation/
 ├── rawdata/                    # Raw PSM TSV files from LC-MS/MS searches
 │   ├── 6mer/psm/               # 6-residue library, batch 1
 │   ├── 6mer2/psm/              # 6-residue library, batch 2
@@ -336,15 +336,15 @@ peptag/
 
 ## Citation
 
-If you use PepTag in your research, please cite:
+If you use StereoPep in your research, please cite:
 
 ```bibtex
-@dataset{kazeminia2026peptag,
+@dataset{kazeminia2026stereopep,
   author    = {Kazeminia, Amirabbas},
-  title     = {PepTag: Peptide Reversed-Phase HPLC Retention Time Dataset},
+  title     = {StereoPep: Peptide Reversed-Phase HPLC Retention Time Dataset},
   year      = {2026},
   publisher = {Hugging Face},
-  url       = {https://huggingface.co/datasets/amirika20/peptag}
+  url       = {https://huggingface.co/datasets/amirka20/StereoPep}
 }
 ```
 

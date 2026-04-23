@@ -1,11 +1,11 @@
 """
-Smoke-test that the peptag dataset loads correctly from Hugging Face Hub.
+Smoke-test that the StereoPep dataset loads correctly from Hugging Face Hub.
 """
 
 from datasets import load_dataset
 
 
-REPO_ID = "amirka20/peptag"
+REPO_ID = "amirka20/StereoPep"
 EXPECTED_COLUMNS = {"Peptide", "B", "M", "Z", "Length", "SMILES"}
 EXPECTED_STEREO_COLUMNS = {"Sequence_f", "Sequence_F", "SMILES_f", "SMILES_F", "B_f", "B_F", "delta_B"}
 EXPECTED_TAG_COLUMNS = {"Sequence_untagged", "Sequence_tagged", "Tag", "SMILES_untagged", "SMILES_tagged", "B_untagged", "B_tagged", "delta_B"}
@@ -21,9 +21,9 @@ print("=" * 60)
 print(f"Testing dataset: {REPO_ID}")
 print("=" * 60)
 
-# --- config: peptag ---
-print("\nConfig 'peptag':")
-ds = load_dataset(REPO_ID, "peptag")
+# --- config: StereoPep ---
+print("\nConfig 'StereoPep':")
+ds = load_dataset(REPO_ID, "StereoPep")
 
 for split, expected_rows in [("train", 41_455), ("val", 4_607), ("test", 2_726), ("trainval", 46_062)]:
     split_ds = ds[split]

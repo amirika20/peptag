@@ -1,7 +1,7 @@
 """
 data_processing.py
 ==================
-Core utilities for the PepTag curation pipeline.
+Core utilities for the StereoPep curation pipeline.
 
 Two responsibilities:
   1. **SMILES generation** – convert a one-letter peptide sequence (including the
@@ -367,7 +367,7 @@ def clean_psm(input_path, output_path, method_fn):
 
 
 if __name__ == "__main__":
-    base_path = Path("/home/amirabbas-kazeminia/Projects/peptag")
+    base_path = Path("/home/amirabbas-kazeminia/Projects/StereoPep-Curation")
     rawdata_path = base_path / "rawdata"
     curated_path = base_path / "curated_data"
 
