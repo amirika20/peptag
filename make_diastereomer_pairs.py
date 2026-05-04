@@ -1,5 +1,5 @@
 """
-Build a CSV of D-Phe / L-Phe stereo pairs from test.csv.
+Build a CSV of D-Phe / L-Phe diastereomer pairs from test.csv.
 
 For every sequence containing D-Phe ('f'), the L-Phe counterpart is obtained
 by replacing all 'f' with 'F'.  Only pairs where both versions exist in the
@@ -24,12 +24,12 @@ import pandas as pd
 from pathlib import Path
 
 
-def make_stereo_pairs(
+def make_diastereomer_pairs(
     input_path: str | Path,
     output_path: str | Path,
     min_delta_b: float = 1.0,
 ) -> pd.DataFrame:
-    """Extract D-Phe / L-Phe stereo pairs with a minimum %B difference filter.
+    """Extract D-Phe / L-Phe diastereomer pairs with a minimum %B difference filter.
 
     Parameters
     ----------
@@ -90,14 +90,14 @@ def make_stereo_pairs(
 
 
 if __name__ == "__main__":
-    make_stereo_pairs(
+    make_diastereomer_pairs(
         input_path="curated_data/test.csv",
-        output_path="curated_data/stereo_pairs.csv",
+        output_path="curated_data/diastereomer_pairs.csv",
         min_delta_b=1.0,
     )
     print()
-    make_stereo_pairs(
+    make_diastereomer_pairs(
         input_path="curated_data/trainval.csv",
-        output_path="curated_data/stereo_pairs_trainval.csv",
+        output_path="curated_data/diastereomer_pairs_trainval.csv",
         min_delta_b=1.0,
     )

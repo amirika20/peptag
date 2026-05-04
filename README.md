@@ -30,7 +30,7 @@ Predicting peptide retention time is a core problem in proteomics and peptidomic
 - Peptides of **6 – 15 residues** and variable-length libraries.
 - Both **K-terminus** (Lys C-terminus) and **R-terminus** (Arg C-terminus) scaffolds.
 - Three **N/C-terminal tagging variants**: D-Phenylalanine, L-Phenylalanine, and label-free (no tag).
-- A dedicated **stereo-pair subset** pairing each D-Phe peptide with its L-Phe counterpart for studying the stereochemical effect on retention.
+- A dedicated **diastereomer-pair subset** pairing each D-Phe peptide with its L-Phe counterpart for studying the stereochemical effect on retention.
 - Programmatically generated **isomeric SMILES** with explicit chirality at every alpha-carbon.
 
 ---
@@ -43,7 +43,7 @@ Predicting peptide retention time is a core problem in proteomics and peptidomic
 | Train (90 %) | `curated_data/train.csv` | 41 455 |
 | Validation (10 %) | `curated_data/val.csv` | 4 607 |
 | Test (held-out library) | `curated_data/test.csv` | 2 726 |
-| Stereo pairs | `curated_data/stereo_pairs.csv` | 783 |
+| Diastereomer pairs | `curated_data/diastereomer_pairs.csv` | 783 |
 
 The test set comes from an independent library (`rawdata/test/`) that was not used to construct the train/val split, making it a true held-out benchmark.
 
@@ -127,7 +127,7 @@ curated_data/test.csv     ←── held-out test pool
         │
         ├─▶  split_data.py  →  train.csv, val.csv
         │
-        └─▶  make_stereo_pairs.py  →  stereo_pairs.csv
+        └─▶  make_diastereomer_pairs.py  →  diastereomer_pairs.csv
 ```
 
 ### Step 1 — `data_processing.py`: PSM Cleaning
@@ -175,16 +175,16 @@ For each raw TSV file, `clean_psm()` performs the following:
 
 This guarantees that every combination of terminal type, tagging variant, and length is represented proportionally in both splits. The random seed is fixed at 42 for reproducibility.
 
-### Step 4 — `make_stereo_pairs.py`: Stereo Pair Extraction
+### Step 4 — `make_diastereomer_pairs.py`: Diastereomer Pair Extraction
 
-`make_stereo_pairs()` extracts pairs of sequences that differ only in the stereochemistry of phenylalanine:
+`make_diastereomer_pairs()` extracts pairs of sequences that differ only in the stereochemistry of phenylalanine:
 
 - Start from every D-Phe sequence in `test.csv`.
 - Generate the putative L-Phe counterpart by replacing all `f` → `F`.
 - Keep only pairs where both members exist in the dataset.
 - **Discard pairs where `|B_f − B_F| < 1.0 %B`** — a difference smaller than 1 %B is within experimental noise and does not represent a reliable stereochemical effect on retention.
 
-The resulting `stereo_pairs.csv` enables direct measurement of the **retention shift induced by phenylalanine stereoinversion**. The `min_delta_b` threshold (default 1.0 %B) can be adjusted when calling `make_stereo_pairs()` directly.
+The resulting `diastereomer_pairs.csv` enables direct measurement of the **retention shift induced by phenylalanine stereoinversion**. The `min_delta_b` threshold (default 1.0 %B) can be adjusted when calling `make_stereo_pairs()` directly.
 
 ---
 
@@ -201,7 +201,7 @@ The resulting `stereo_pairs.csv` enables direct measurement of the **retention s
 | `Length` | int | Sequence length (number of residues). |
 | `SMILES` | string | Isomeric SMILES with explicit stereochemistry at every alpha-carbon, protonated at pH 3 (`[NH3+]` N-terminus, `[NH3+]` Lys, `[NH2+]=` Arg, `[nH+]` His). |
 
-### `stereo_pairs.csv`
+### `diastereomer_pairs.csv`
 
 Only pairs with `|B_f − B_F| ≥ 1.0 %B` are included (pairs below this threshold are considered within experimental noise).
 
@@ -292,8 +292,8 @@ python merge_data.py
 # 3. Split into train / val
 python split_data.py
 
-# 4. Extract stereo pairs from test set
-python make_stereo_pairs.py
+# 4. Extract diastereomer pairs from test set
+python make_diastereomer_pairs.py
 ```
 
 ---
@@ -322,12 +322,14 @@ StereoPep-Curation/
 │   ├── train.csv               # 90% stratified training split
 │   ├── val.csv                 # 10% stratified validation split
 │   ├── test.csv                # Held-out test set (independent library)
-│   └── stereo_pairs.csv        # D-Phe / L-Phe stereo pairs from test set
+│   └── diastereomer_pairs.csv  # D-Phe / L-Phe diastereomer pairs from test set
 │
 ├── data_processing.py          # PSM cleaning + SMILES generation utilities
 ├── merge_data.py               # Library merging and deduplication
 ├── split_data.py               # Stratified train/val split
-├── make_stereo_pairs.py        # Stereo-pair extraction
+├── make_diastereomer_pairs.py  # Diastereomer-pair extraction
+├── make_point_mutant_pairs.py  # Point-mutant pair extraction
+├── make_terminal_tag_pairs.py  # Terminal-tag pair extraction
 ├── LICENSE
 └── README.md
 ```

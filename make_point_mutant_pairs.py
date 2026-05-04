@@ -44,12 +44,12 @@ def _count_differences(s1: str, s2: str) -> tuple[int, int]:
     return diff_count, diff_pos
 
 
-def make_substitution_pairs(
+def make_point_mutant_pairs(
     input_path: str | Path,
     output_path: str | Path,
     min_delta_b: float = 1.0,
 ) -> pd.DataFrame:
-    """Extract single-residue substitution pairs with a minimum %B difference filter.
+    """Extract single-residue point mutant pairs with a minimum %B difference filter.
 
     Parameters
     ----------
@@ -122,8 +122,8 @@ def make_substitution_pairs(
 
 
 if __name__ == "__main__":
-    make_substitution_pairs(
+    make_point_mutant_pairs(
         input_path="curated_data/test.csv",
-        output_path="curated_data/substitution_pairs.csv",
+        output_path="curated_data/point_mutant_pairs.csv",
         min_delta_b=1.0,
     )

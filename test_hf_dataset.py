@@ -30,22 +30,22 @@ for split, expected_rows in [("train", 41_455), ("val", 4_607), ("test", 2_726),
     check(set(split_ds.column_names) == EXPECTED_COLUMNS, f"{split}: columns match")
     check(len(split_ds) == expected_rows, f"{split}: {len(split_ds):,} rows (expected {expected_rows:,})")
 
-# --- config: stereo_pairs ---
-print("\nConfig 'stereo_pairs':")
-stereo = load_dataset(REPO_ID, "stereo_pairs")["stereo_pairs"]
-check(set(stereo.column_names) == EXPECTED_STEREO_COLUMNS, "stereo_pairs: columns match")
-check(len(stereo) == 542, f"stereo_pairs: {len(stereo):,} rows (expected 542)")
+# --- config: diastereomer_pairs ---
+print("\nConfig 'diastereomer_pairs':")
+stereo = load_dataset(REPO_ID, "diastereomer_pairs")["diastereomer_pairs"]
+check(set(stereo.column_names) == EXPECTED_STEREO_COLUMNS, "diastereomer_pairs: columns match")
+check(len(stereo) == 542, f"diastereomer_pairs: {len(stereo):,} rows (expected 542)")
 
-# --- config: tag_pairs ---
-print("\nConfig 'tag_pairs':")
-tag = load_dataset(REPO_ID, "tag_pairs")["tag_pairs"]
-check(set(tag.column_names) == EXPECTED_TAG_COLUMNS, "tag_pairs: columns match")
-check(len(tag) == 1_549, f"tag_pairs: {len(tag):,} rows (expected 1,549)")
+# --- config: terminal_tag_pairs ---
+print("\nConfig 'terminal_tag_pairs':")
+tag = load_dataset(REPO_ID, "terminal_tag_pairs")["terminal_tag_pairs"]
+check(set(tag.column_names) == EXPECTED_TAG_COLUMNS, "terminal_tag_pairs: columns match")
+check(len(tag) == 1_549, f"terminal_tag_pairs: {len(tag):,} rows (expected 1,549)")
 
-# --- config: substitution_pairs ---
-print("\nConfig 'substitution_pairs':")
-sub = load_dataset(REPO_ID, "substitution_pairs")["substitution_pairs"]
-check(set(sub.column_names) == EXPECTED_SUBSTITUTION_COLUMNS, "substitution_pairs: columns match")
-check(len(sub) == 6_942, f"substitution_pairs: {len(sub):,} rows (expected 6,942)")
+# --- config: point_mutant_pairs ---
+print("\nConfig 'point_mutant_pairs':")
+sub = load_dataset(REPO_ID, "point_mutant_pairs")["point_mutant_pairs"]
+check(set(sub.column_names) == EXPECTED_SUBSTITUTION_COLUMNS, "point_mutant_pairs: columns match")
+check(len(sub) == 6_942, f"point_mutant_pairs: {len(sub):,} rows (expected 6,942)")
 
 print("\nDone.")

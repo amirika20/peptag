@@ -40,12 +40,12 @@ def _get_core(seq: str) -> str:
     return core
 
 
-def make_tag_pairs(
+def make_terminal_tag_pairs(
     input_path: str | Path,
     output_path: str | Path,
     min_delta_b: float = 1.0,
 ) -> pd.DataFrame:
-    """Extract tagged / untagged pairs with a minimum %B difference filter.
+    """Extract terminal-tagged / untagged pairs with a minimum %B difference filter.
 
     Parameters
     ----------
@@ -114,8 +114,8 @@ def make_tag_pairs(
 
 
 if __name__ == "__main__":
-    make_tag_pairs(
+    make_terminal_tag_pairs(
         input_path="curated_data/test.csv",
-        output_path="curated_data/tag_pairs.csv",
+        output_path="curated_data/terminal_tag_pairs.csv",
         min_delta_b=1.0,
     )
