@@ -1,0 +1,765 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "arrayShape": "cr:arrayShape",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "containedIn": "cr:containedIn",
+    "cr": "http://mlcommons.org/croissant/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataBiases": "cr:dataBiases",
+    "dataCollection": "cr:dataCollection",
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isArray": "cr:isArray",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "personalSensitiveInformation": "cr:personalSensitiveInformation",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "repo",
+      "name": "repo",
+      "description": "The Hugging Face git repository.",
+      "contentUrl": "https://huggingface.co/datasets/stereopep-ano/stereopep/tree/refs%2Fconvert%2Fparquet",
+      "encodingFormat": "git+https",
+      "sha256": "https://github.com/mlcommons/croissant/issues/80"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "parquet-files-for-config-StereoPep",
+      "containedIn": {
+        "@id": "repo"
+      },
+      "encodingFormat": "application/x-parquet",
+      "includes": "StereoPep/*/*.parquet"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "parquet-files-for-config-diastereomer_pairs",
+      "containedIn": {
+        "@id": "repo"
+      },
+      "encodingFormat": "application/x-parquet",
+      "includes": "diastereomer_pairs/*/*.parquet"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "parquet-files-for-config-point_mutant_pairs",
+      "containedIn": {
+        "@id": "repo"
+      },
+      "encodingFormat": "application/x-parquet",
+      "includes": "point_mutant_pairs/*/*.parquet"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "parquet-files-for-config-terminal_tag_pairs",
+      "containedIn": {
+        "@id": "repo"
+      },
+      "encodingFormat": "application/x-parquet",
+      "includes": "terminal_tag_pairs/*/*.parquet"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "dataType": "cr:Split",
+      "key": {
+        "@id": "StereoPep_splits/split_name"
+      },
+      "@id": "StereoPep_splits",
+      "name": "StereoPep_splits",
+      "description": "Splits for the StereoPep config.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "StereoPep_splits/split_name",
+          "dataType": "sc:Text"
+        }
+      ],
+      "data": [
+        {
+          "StereoPep_splits/split_name": "train"
+        },
+        {
+          "StereoPep_splits/split_name": "val"
+        },
+        {
+          "StereoPep_splits/split_name": "test"
+        },
+        {
+          "StereoPep_splits/split_name": "trainval"
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "StereoPep",
+      "description": "stereopep-ano/stereopep - 'StereoPep' subset\n\nAdditional information:\n- 4 splits: train, val, test, trainval",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "StereoPep/split",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-StereoPep"
+            },
+            "extract": {
+              "fileProperty": "fullpath"
+            },
+            "transform": {
+              "regex": "StereoPep/(?:partial-)?(train|val|test|trainval)/.+parquet$"
+            }
+          },
+          "references": {
+            "field": {
+              "@id": "StereoPep_splits/split_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "StereoPep/Peptide",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-StereoPep"
+            },
+            "extract": {
+              "column": "Peptide"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "StereoPep/B",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-StereoPep"
+            },
+            "extract": {
+              "column": "B"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "StereoPep/M",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-StereoPep"
+            },
+            "extract": {
+              "column": "M"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "StereoPep/Z",
+          "dataType": "cr:Int64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-StereoPep"
+            },
+            "extract": {
+              "column": "Z"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "StereoPep/Length",
+          "dataType": "cr:Int64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-StereoPep"
+            },
+            "extract": {
+              "column": "Length"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "StereoPep/SMILES",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-StereoPep"
+            },
+            "extract": {
+              "column": "SMILES"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "dataType": "cr:Split",
+      "key": {
+        "@id": "diastereomer_pairs_splits/split_name"
+      },
+      "@id": "diastereomer_pairs_splits",
+      "name": "diastereomer_pairs_splits",
+      "description": "Splits for the diastereomer_pairs config.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "diastereomer_pairs_splits/split_name",
+          "dataType": "sc:Text"
+        }
+      ],
+      "data": [
+        {
+          "diastereomer_pairs_splits/split_name": "diastereomer_pairs"
+        },
+        {
+          "diastereomer_pairs_splits/split_name": "diastereomer_pairs_trainval"
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "diastereomer_pairs",
+      "description": "stereopep-ano/stereopep - 'diastereomer_pairs' subset\n\nAdditional information:\n- 2 splits: diastereomer_pairs, diastereomer_pairs_trainval",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "diastereomer_pairs/split",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-diastereomer_pairs"
+            },
+            "extract": {
+              "fileProperty": "fullpath"
+            },
+            "transform": {
+              "regex": "diastereomer_pairs/(?:partial-)?(diastereomer_pairs|diastereomer_pairs_trainval)/.+parquet$"
+            }
+          },
+          "references": {
+            "field": {
+              "@id": "diastereomer_pairs_splits/split_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "diastereomer_pairs/Sequence_f",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-diastereomer_pairs"
+            },
+            "extract": {
+              "column": "Sequence_f"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "diastereomer_pairs/Sequence_F",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-diastereomer_pairs"
+            },
+            "extract": {
+              "column": "Sequence_F"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "diastereomer_pairs/SMILES_f",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-diastereomer_pairs"
+            },
+            "extract": {
+              "column": "SMILES_f"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "diastereomer_pairs/SMILES_F",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-diastereomer_pairs"
+            },
+            "extract": {
+              "column": "SMILES_F"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "diastereomer_pairs/B_f",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-diastereomer_pairs"
+            },
+            "extract": {
+              "column": "B_f"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "diastereomer_pairs/B_F",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-diastereomer_pairs"
+            },
+            "extract": {
+              "column": "B_F"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "diastereomer_pairs/delta_B",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-diastereomer_pairs"
+            },
+            "extract": {
+              "column": "delta_B"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "dataType": "cr:Split",
+      "key": {
+        "@id": "point_mutant_pairs_splits/split_name"
+      },
+      "@id": "point_mutant_pairs_splits",
+      "name": "point_mutant_pairs_splits",
+      "description": "Splits for the point_mutant_pairs config.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "point_mutant_pairs_splits/split_name",
+          "dataType": "sc:Text"
+        }
+      ],
+      "data": [
+        {
+          "point_mutant_pairs_splits/split_name": "point_mutant_pairs"
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "point_mutant_pairs",
+      "description": "stereopep-ano/stereopep - 'point_mutant_pairs' subset",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "point_mutant_pairs/split",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-point_mutant_pairs"
+            },
+            "extract": {
+              "fileProperty": "fullpath"
+            },
+            "transform": {
+              "regex": "point_mutant_pairs/(?:partial-)?(point_mutant_pairs)/.+parquet$"
+            }
+          },
+          "references": {
+            "field": {
+              "@id": "point_mutant_pairs_splits/split_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "point_mutant_pairs/Sequence_1",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-point_mutant_pairs"
+            },
+            "extract": {
+              "column": "Sequence_1"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "point_mutant_pairs/Sequence_2",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-point_mutant_pairs"
+            },
+            "extract": {
+              "column": "Sequence_2"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "point_mutant_pairs/Position",
+          "dataType": "cr:Int64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-point_mutant_pairs"
+            },
+            "extract": {
+              "column": "Position"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "point_mutant_pairs/Residue_1",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-point_mutant_pairs"
+            },
+            "extract": {
+              "column": "Residue_1"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "point_mutant_pairs/Residue_2",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-point_mutant_pairs"
+            },
+            "extract": {
+              "column": "Residue_2"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "point_mutant_pairs/SMILES_1",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-point_mutant_pairs"
+            },
+            "extract": {
+              "column": "SMILES_1"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "point_mutant_pairs/SMILES_2",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-point_mutant_pairs"
+            },
+            "extract": {
+              "column": "SMILES_2"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "point_mutant_pairs/B_1",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-point_mutant_pairs"
+            },
+            "extract": {
+              "column": "B_1"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "point_mutant_pairs/B_2",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-point_mutant_pairs"
+            },
+            "extract": {
+              "column": "B_2"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "point_mutant_pairs/delta_B",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-point_mutant_pairs"
+            },
+            "extract": {
+              "column": "delta_B"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "dataType": "cr:Split",
+      "key": {
+        "@id": "terminal_tag_pairs_splits/split_name"
+      },
+      "@id": "terminal_tag_pairs_splits",
+      "name": "terminal_tag_pairs_splits",
+      "description": "Splits for the terminal_tag_pairs config.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "terminal_tag_pairs_splits/split_name",
+          "dataType": "sc:Text"
+        }
+      ],
+      "data": [
+        {
+          "terminal_tag_pairs_splits/split_name": "terminal_tag_pairs"
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "terminal_tag_pairs",
+      "description": "stereopep-ano/stereopep - 'terminal_tag_pairs' subset",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "terminal_tag_pairs/split",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-terminal_tag_pairs"
+            },
+            "extract": {
+              "fileProperty": "fullpath"
+            },
+            "transform": {
+              "regex": "terminal_tag_pairs/(?:partial-)?(terminal_tag_pairs)/.+parquet$"
+            }
+          },
+          "references": {
+            "field": {
+              "@id": "terminal_tag_pairs_splits/split_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "terminal_tag_pairs/Sequence_untagged",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-terminal_tag_pairs"
+            },
+            "extract": {
+              "column": "Sequence_untagged"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "terminal_tag_pairs/Sequence_tagged",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-terminal_tag_pairs"
+            },
+            "extract": {
+              "column": "Sequence_tagged"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "terminal_tag_pairs/Tag",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-terminal_tag_pairs"
+            },
+            "extract": {
+              "column": "Tag"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "terminal_tag_pairs/SMILES_untagged",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-terminal_tag_pairs"
+            },
+            "extract": {
+              "column": "SMILES_untagged"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "terminal_tag_pairs/SMILES_tagged",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-terminal_tag_pairs"
+            },
+            "extract": {
+              "column": "SMILES_tagged"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "terminal_tag_pairs/B_untagged",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-terminal_tag_pairs"
+            },
+            "extract": {
+              "column": "B_untagged"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "terminal_tag_pairs/B_tagged",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-terminal_tag_pairs"
+            },
+            "extract": {
+              "column": "B_tagged"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "terminal_tag_pairs/delta_B",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-terminal_tag_pairs"
+            },
+            "extract": {
+              "column": "delta_B"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "StereoPep",
+  "identifier": "10.57967/hf/8658",
+  "description": "stereopep-ano/stereopep dataset hosted on Hugging Face and contributed by the HF Datasets community",
+  "alternateName": [
+    "stereopep-ano/stereopep"
+  ],
+  "creator": {
+    "@type": "Person",
+    "name": "Anonymous Authors",
+    "url": "https://huggingface.co/stereopep-ano"
+  },
+  "keywords": [
+    "mit",
+    "100K - 1M",
+    "parquet",
+    "optimized-parquet",
+    "Tabular",
+    "Text",
+    "Datasets",
+    "pandas",
+    "Polars",
+    "Croissant",
+    "doi:10.57967/hf/8658",
+    "🇺🇸 Region: US"
+  ],
+  "license": "https://choosealicense.com/licenses/mit/",
+  "url": "https://huggingface.co/datasets/stereopep-ano/stereopep",
+  "rai:dataLimitations": "This dataset was designed and generated in a controlled chemistry laboratory setting using a specific set of synthetic peptide libraries, and therefore reflects the design choices and experimental constraints of those libraries rather than the full diversity of peptide chemical space. It is biased toward the distributions induced by the designed libraries and does not cover all amino acids in their D-configuration, resulting in incomplete stereochemical coverage. Additionally, the data are derived from reversed-phase liquid chromatography retention time measurements under fixed experimental conditions, which may not generalize to other assays or environments. The dataset was constructed primarily for developing and benchmarking preliminary machine learning models, particularly for peptide and molecular representation learning and for evaluating sensitivity to stereochemical perturbations. It is not recommended for use in downstream applications that require broad biochemical generalization, such as drug discovery pipelines without further validation, nor for tasks that depend on accurate three-dimensional structural modeling or physical simulation. It should also not be used for clinical, medical, or safety-critical decision-making.",
+  "rai:dataBiases": "The dataset exhibits selection bias due to its construction from a predefined set of synthetic peptide libraries, leading to overrepresentation of specific sequence motifs, amino acid compositions, and stereochemical configurations that arise from the design process described in the paper. Conversely, other regions of peptide space, including diverse modifications and broader stereochemical variants, are underrepresented or absent. Label bias may also be present due to experimental noise and systematic effects in chromatography measurements, such as gradient conditions and instrument calibration. Furthermore, the dataset emphasizes relative retention-time differences within matched peptide pairs, which may bias models toward learning local comparative signals rather than globally generalizable patterns. As a result, models trained on this dataset may perform well on similar synthetic distributions but fail to generalize to natural peptides or unseen chemical modifications.",
+  "rai:personalSensitiveInformation": "This dataset does not contain any personal or sensitive information. It does not include data related to gender, socio-economic status, geography, language, age, culture, experience or seniority, health or medical information, or political or religious beliefs, as it consists entirely of synthetic chemical data generated in a laboratory setting.",
+  "rai:dataUseCases": "This dataset is intended to represent peptide physicochemical behavior, specifically chromatographic retention time as a proxy for hydrophobicity, as well as stereochemical effects arising from differences such as D- versus L-amino acid substitutions. It is designed to evaluate protein and molecular models for representation learning and their ability to capture stereochemistry-dependent changes in measurable properties. The dataset has been validated for sequence-based prediction tasks involving retention time and pairwise stereochemical comparisons, as demonstrated in the accompanying experiments. However, it has not been validated for three-dimensional structural modeling, biological function prediction such as binding affinity or toxicity, or applications requiring in vivo relevance, and its use in such contexts may not be appropriate.",
+  "rai:dataSocialImpact": "The dataset has the potential to positively impact research by enabling more rigorous evaluation of machine learning models in chemistry, particularly in capturing subtle stereochemical effects, and may contribute to the development of more robust and generalizable models for molecular design. However, misuse of the dataset without accounting for its limitations could lead to incorrect scientific conclusions or poor model generalization, especially if applied outside its intended domain. There is also a risk that over-reliance on this dataset could reinforce narrow modeling assumptions tied to synthetic laboratory conditions. These risks are mitigated by clearly documenting the dataset’s scope, biases, and limitations, and by encouraging users to validate models on complementary datasets and broader settings before applying them in real-world scenarios.",
+  "rai:hasSyntheticData": false,
+  "prov:wasGeneratedBy": [
+    {
+      "@type": "prov:Activity",
+      "prov:type": {
+        "@id": "https://www.wikidata.org/wiki/Q4929239"
+      },
+      "prov:label": "fast flow peptide synthesis"
+    }
+  ],
+  "prov:wasDerivedFrom": [
+    {
+      "@id": "https://github.com/StereoPep/stereopep-curation",
+      "prov:label": "Internal dataset",
+      "sc:license": "MIT License"
+    }
+  ]
+}

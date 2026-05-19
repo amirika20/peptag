@@ -12,11 +12,13 @@ each group is pushed as a separate named config (subset) on the same repo:
   - config "point_mutant_pairs"   → point_mutant_pairs split
 """
 
+import os
 import pandas as pd
 from datasets import Dataset, DatasetDict
 from huggingface_hub import login
 
-REPO_ID = "amirka20/StereoPep"
+REPO_ID = "stereopep-ano/stereopep"
+HF_TOKEN = os.environ.get("HF_TOKEN")  # set via: export HF_TOKEN=hf_...
 
 
 def load_csv(path: str) -> Dataset:
@@ -26,7 +28,7 @@ def load_csv(path: str) -> Dataset:
 
 
 if __name__ == "__main__":
-    login()
+    login(token=HF_TOKEN)
 
     data_dir = "curated_data"
 

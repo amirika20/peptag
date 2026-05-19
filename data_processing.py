@@ -367,7 +367,7 @@ def clean_psm(input_path, output_path, method_fn):
 
 
 if __name__ == "__main__":
-    base_path = Path("/home/amirabbas-kazeminia/Projects/StereoPep-Curation")
+    base_path = Path(__file__).parent
     rawdata_path = base_path / "rawdata"
     curated_path = base_path / "curated_data"
 
