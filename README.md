@@ -22,9 +22,9 @@ size_categories:
 ---
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![HuggingFace Dataset](https://img.shields.io/badge/🤗%20Dataset-stereopep--ano%2FStereoPep-yellow)](https://huggingface.co/datasets/stereopep-ano/StereoPep)
+[![HuggingFace Dataset](https://img.shields.io/badge/🤗%20Dataset-stereopep--ano%2FStereoPep-yellow)](https://huggingface.co/datasets/amirka20/StereoPep)
 
-[**arXiv Preprint**](https://arxiv.org/abs/PLACEHOLDER) | [**HuggingFace Dataset**](https://huggingface.co/datasets/stereopep-ano/StereoPep) | [**GitHub**](https://github.com/amirika20/StereoPep-Benchmarks) | [**Dataset Curation**](https://github.com/amirika20/StereoPep-Curation)
+[**arXiv Preprint**](https://arxiv.org/abs/PLACEHOLDER) | [**HuggingFace Dataset**](https://huggingface.co/datasets/amirka20/StereoPep) | [**GitHub**](https://github.com/amirika20/StereoPep-Benchmarks) | [**Dataset Curation**](https://github.com/amirika20/StereoPep-Curation)
 
 # StereoPep-Benchmarks
 
@@ -368,12 +368,13 @@ StereoPep-Curation/
 If you use StereoPep in your research, please cite:
 
 ```bibtex
-@dataset{kazeminia2026stereopep,
-  author    = {Kazeminia, Amirabbas},
-  title     = {StereoPep: Peptide Reversed-Phase HPLC Retention Time Dataset},
-  year      = {2026},
-  publisher = {Hugging Face},
-  url       = {https://huggingface.co/datasets/amirka20/StereoPep}
+@misc{amirabbas_kazeminia_2026,
+	author       = { Amirabbas Kazeminia and Michael Desgagné },
+	title        = { StereoPep (Revision 3848950) },
+	year         = 2026,
+	url          = { https://huggingface.co/datasets/amirka20/StereoPep },
+	doi          = { 10.57967/hf/8658 },
+	publisher    = { Hugging Face }
 }
 ```
 
