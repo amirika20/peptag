@@ -54,7 +54,7 @@
       "@id": "repo",
       "name": "repo",
       "description": "The Hugging Face git repository.",
-      "contentUrl": "https://huggingface.co/datasets/stereopep-ano/stereopep/tree/refs%2Fconvert%2Fparquet",
+      "contentUrl": "https://huggingface.co/datasets/amirka20/StereoPep/tree/refs%2Fconvert%2Fparquet",
       "encodingFormat": "git+https",
       "sha256": "https://github.com/mlcommons/croissant/issues/80"
     },
@@ -75,6 +75,15 @@
       },
       "encodingFormat": "application/x-parquet",
       "includes": "diastereomer_pairs/*/*.parquet"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "parquet-files-for-config-natural",
+      "containedIn": {
+        "@id": "repo"
+      },
+      "encodingFormat": "application/x-parquet",
+      "includes": "natural/*/*.parquet"
     },
     {
       "@type": "cr:FileSet",
@@ -130,7 +139,7 @@
     {
       "@type": "cr:RecordSet",
       "@id": "StereoPep",
-      "description": "stereopep-ano/stereopep - 'StereoPep' subset\n\nAdditional information:\n- 4 splits: train, val, test, trainval",
+      "description": "amirka20/StereoPep - 'StereoPep' subset\n\nAdditional information:\n- 4 splits: train, val, test, trainval",
       "field": [
         {
           "@type": "cr:Field",
@@ -261,7 +270,7 @@
     {
       "@type": "cr:RecordSet",
       "@id": "diastereomer_pairs",
-      "description": "stereopep-ano/stereopep - 'diastereomer_pairs' subset\n\nAdditional information:\n- 2 splits: diastereomer_pairs, diastereomer_pairs_trainval",
+      "description": "amirka20/StereoPep - 'diastereomer_pairs' subset\n\nAdditional information:\n- 2 splits: diastereomer_pairs, diastereomer_pairs_trainval",
       "field": [
         {
           "@type": "cr:Field",
@@ -381,6 +390,140 @@
       "@type": "cr:RecordSet",
       "dataType": "cr:Split",
       "key": {
+        "@id": "natural_splits/split_name"
+      },
+      "@id": "natural_splits",
+      "name": "natural_splits",
+      "description": "Splits for the natural config.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "natural_splits/split_name",
+          "dataType": "sc:Text"
+        }
+      ],
+      "data": [
+        {
+          "natural_splits/split_name": "train"
+        },
+        {
+          "natural_splits/split_name": "val"
+        },
+        {
+          "natural_splits/split_name": "test"
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "natural",
+      "description": "amirka20/StereoPep - 'natural' subset\n\nAdditional information:\n- 3 splits: train, val, test",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "natural/split",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-natural"
+            },
+            "extract": {
+              "fileProperty": "fullpath"
+            },
+            "transform": {
+              "regex": "natural/(?:partial-)?(train|val|test)/.+parquet$"
+            }
+          },
+          "references": {
+            "field": {
+              "@id": "natural_splits/split_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "natural/Peptide",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-natural"
+            },
+            "extract": {
+              "column": "Peptide"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "natural/B",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-natural"
+            },
+            "extract": {
+              "column": "B"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "natural/M",
+          "dataType": "cr:Float64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-natural"
+            },
+            "extract": {
+              "column": "M"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "natural/Z",
+          "dataType": "cr:Int64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-natural"
+            },
+            "extract": {
+              "column": "Z"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "natural/Length",
+          "dataType": "cr:Int64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-natural"
+            },
+            "extract": {
+              "column": "Length"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "natural/SMILES",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-natural"
+            },
+            "extract": {
+              "column": "SMILES"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "dataType": "cr:Split",
+      "key": {
         "@id": "point_mutant_pairs_splits/split_name"
       },
       "@id": "point_mutant_pairs_splits",
@@ -402,7 +545,7 @@
     {
       "@type": "cr:RecordSet",
       "@id": "point_mutant_pairs",
-      "description": "stereopep-ano/stereopep - 'point_mutant_pairs' subset",
+      "description": "amirka20/StereoPep - 'point_mutant_pairs' subset",
       "field": [
         {
           "@type": "cr:Field",
@@ -582,7 +725,7 @@
     {
       "@type": "cr:RecordSet",
       "@id": "terminal_tag_pairs",
-      "description": "stereopep-ano/stereopep - 'terminal_tag_pairs' subset",
+      "description": "amirka20/StereoPep - 'terminal_tag_pairs' subset",
       "field": [
         {
           "@type": "cr:Field",
@@ -715,16 +858,19 @@
   "conformsTo": "http://mlcommons.org/croissant/1.1",
   "name": "StereoPep",
   "identifier": "10.57967/hf/8658",
-  "description": "stereopep-ano/stereopep dataset hosted on Hugging Face and contributed by the HF Datasets community",
+  "description": "\n  \n\n\n\n\t\n\t\t\n\t\n\t\n\t\tStereoPep\n\t\n\nPredicting the Effects of Stereochemical Inversions on Synthetic Peptide Retention Time in Combinatorial Libraries\nStereoPep is a benchmark of 48,788 chemically synthesized peptides spanning 11 libraries,\nproduced by high-throughput flow synthesis and characterized by reverse-phase liquid\nchromatography retention time. It exists to answer a specific question: do molecular models\nthat predict peptide properties well actually represent stereochemistry, or do they… See the full description on the dataset page: https://huggingface.co/datasets/amirka20/StereoPep.",
   "alternateName": [
-    "stereopep-ano/stereopep"
+    "amirka20/StereoPep",
+    "StereoPep - Peptide Retention Time Dataset"
   ],
   "creator": {
     "@type": "Person",
-    "name": "Anonymous Authors",
-    "url": "https://huggingface.co/stereopep-ano"
+    "name": "Amirabbas Kazeminia",
+    "url": "https://huggingface.co/amirka20"
   },
   "keywords": [
+    "tabular-regression",
+    "English",
     "mit",
     "100K - 1M",
     "parquet",
@@ -736,15 +882,22 @@
     "Polars",
     "Croissant",
     "doi:10.57967/hf/8658",
-    "🇺🇸 Region: US"
+    "🇺🇸 Region: US",
+    "peptide",
+    "retention-time",
+    "HPLC",
+    "mass-spectrometry",
+    "cheminformatics",
+    "SMILES",
+    "stereochemistry"
   ],
   "license": "https://choosealicense.com/licenses/mit/",
-  "url": "https://huggingface.co/datasets/stereopep-ano/stereopep",
-  "rai:dataLimitations": "This dataset was designed and generated in a controlled chemistry laboratory setting using a specific set of synthetic peptide libraries, and therefore reflects the design choices and experimental constraints of those libraries rather than the full diversity of peptide chemical space. It is biased toward the distributions induced by the designed libraries and does not cover all amino acids in their D-configuration, resulting in incomplete stereochemical coverage. Additionally, the data are derived from reversed-phase liquid chromatography retention time measurements under fixed experimental conditions, which may not generalize to other assays or environments. The dataset was constructed primarily for developing and benchmarking preliminary machine learning models, particularly for peptide and molecular representation learning and for evaluating sensitivity to stereochemical perturbations. It is not recommended for use in downstream applications that require broad biochemical generalization, such as drug discovery pipelines without further validation, nor for tasks that depend on accurate three-dimensional structural modeling or physical simulation. It should also not be used for clinical, medical, or safety-critical decision-making.",
-  "rai:dataBiases": "The dataset exhibits selection bias due to its construction from a predefined set of synthetic peptide libraries, leading to overrepresentation of specific sequence motifs, amino acid compositions, and stereochemical configurations that arise from the design process described in the paper. Conversely, other regions of peptide space, including diverse modifications and broader stereochemical variants, are underrepresented or absent. Label bias may also be present due to experimental noise and systematic effects in chromatography measurements, such as gradient conditions and instrument calibration. Furthermore, the dataset emphasizes relative retention-time differences within matched peptide pairs, which may bias models toward learning local comparative signals rather than globally generalizable patterns. As a result, models trained on this dataset may perform well on similar synthetic distributions but fail to generalize to natural peptides or unseen chemical modifications.",
-  "rai:personalSensitiveInformation": "This dataset does not contain any personal or sensitive information. It does not include data related to gender, socio-economic status, geography, language, age, culture, experience or seniority, health or medical information, or political or religious beliefs, as it consists entirely of synthetic chemical data generated in a laboratory setting.",
-  "rai:dataUseCases": "This dataset is intended to represent peptide physicochemical behavior, specifically chromatographic retention time as a proxy for hydrophobicity, as well as stereochemical effects arising from differences such as D- versus L-amino acid substitutions. It is designed to evaluate protein and molecular models for representation learning and their ability to capture stereochemistry-dependent changes in measurable properties. The dataset has been validated for sequence-based prediction tasks involving retention time and pairwise stereochemical comparisons, as demonstrated in the accompanying experiments. However, it has not been validated for three-dimensional structural modeling, biological function prediction such as binding affinity or toxicity, or applications requiring in vivo relevance, and its use in such contexts may not be appropriate.",
-  "rai:dataSocialImpact": "The dataset has the potential to positively impact research by enabling more rigorous evaluation of machine learning models in chemistry, particularly in capturing subtle stereochemical effects, and may contribute to the development of more robust and generalizable models for molecular design. However, misuse of the dataset without accounting for its limitations could lead to incorrect scientific conclusions or poor model generalization, especially if applied outside its intended domain. There is also a risk that over-reliance on this dataset could reinforce narrow modeling assumptions tied to synthetic laboratory conditions. These risks are mitigated by clearly documenting the dataset’s scope, biases, and limitations, and by encouraging users to validate models on complementary datasets and broader settings before applying them in real-world scenarios.",
+  "url": "https://huggingface.co/datasets/amirka20/StereoPep",
+  "rai:dataLimitations": "This dataset was designed and generated in a controlled chemistry laboratory setting using a specific set of synthetic peptide libraries, and therefore reflects the design choices and experimental constraints of those libraries rather than the full diversity of peptide chemical space. Stereochemical variation is introduced through D-/L-phenylalanine tagging at the N-terminus and, for lysine-terminated sequences, at the side-chain N-epsilon-amine; stereocenters at internal positions are not varied, so stereochemical coverage is incomplete. The data are reversed-phase liquid chromatography retention-time measurements collected under a single column and gradient configuration, expressed as percent acetonitrile at elution, and may not generalize to other chromatographic systems or assays. The dataset was constructed for developing and benchmarking machine learning models, particularly for peptide and molecular representation learning and for evaluating sensitivity to stereochemical perturbations. It is not recommended for downstream applications requiring broad biochemical generalization, such as drug discovery pipelines, without further validation, nor for tasks that depend on accurate three-dimensional structural modeling or physical simulation. It should not be used for clinical, medical, or safety-critical decision-making.",
+  "rai:dataBiases": "The dataset exhibits selection bias due to its construction from a predefined set of synthetic peptide libraries, leading to overrepresentation of specific sequence motifs, amino acid compositions, and stereochemical configurations that arise from the design process described in the accompanying paper. Sequences terminate in arginine or lysine to mimic tryptic digestion products, so the composition distribution differs from peptides observed in shotgun proteomics. Other regions of peptide space, including diverse modifications and broader stereochemical variants, are underrepresented or absent. Label bias may be present due to experimental noise and systematic effects in chromatography measurements, such as gradient conditions and instrument calibration. The paired benchmarks emphasize relative retention-time differences within matched peptide pairs, which may bias models toward learning local comparative signals rather than globally generalizable patterns. In the held-out diastereomeric pair benchmark, 64.0 percent of pairs have the D-phenylalanine form eluting later, so pairwise accuracy carries a majority-class baseline of 0.640 and threshold-free metrics such as AUC should be preferred. Models trained on this dataset may perform well on similar synthetic distributions but fail to generalize to natural peptides or unseen chemical modifications.",
+  "rai:personalSensitiveInformation": "This dataset does not contain any personal or sensitive information. It does not include data related to gender, socio-economic status, geography, language, age, culture, experience or seniority, health or medical information, or political or religious beliefs, as it consists entirely of chemical measurements on synthetic peptides produced in a laboratory setting.",
+  "rai:dataUseCases": "This dataset is intended to represent peptide physicochemical behavior, specifically chromatographic retention time as a proxy for hydrophobicity, as well as stereochemical effects arising from differences such as D- versus L-amino acid substitutions. It is designed to evaluate protein and molecular models for representation learning and their ability to capture stereochemistry-dependent changes in measurable properties. Alongside retention-time regression, it provides three structured pair benchmarks covering matched diastereomers, single-residue substitutions, and terminal tag effects, and a canonical-amino-acid-only control subset. The dataset has been validated for sequence-based prediction tasks involving retention time and pairwise stereochemical comparisons, as demonstrated in the accompanying experiments. It has not been validated for three-dimensional structural modeling, biological function prediction such as binding affinity or toxicity, or applications requiring in vivo relevance, and its use in such contexts may not be appropriate.",
+  "rai:dataSocialImpact": "The dataset has the potential to positively impact research by enabling more rigorous evaluation of machine learning models in chemistry, particularly in capturing subtle stereochemical effects, and may contribute to the development of more robust and generalizable models for molecular design. However, misuse of the dataset without accounting for its limitations could lead to incorrect scientific conclusions or poor model generalization, especially if applied outside its intended domain. There is also a risk that over-reliance on this dataset could reinforce narrow modeling assumptions tied to synthetic laboratory conditions. These risks are mitigated by clearly documenting the dataset's scope, biases, and limitations, and by encouraging users to validate models on complementary datasets and broader settings before applying them in real-world scenarios.",
   "rai:hasSyntheticData": false,
   "prov:wasGeneratedBy": [
     {
@@ -757,8 +910,8 @@
   ],
   "prov:wasDerivedFrom": [
     {
-      "@id": "https://github.com/StereoPep/stereopep-curation",
-      "prov:label": "Internal dataset",
+      "@id": "https://github.com/amirika20/StereoPep-Curation",
+      "prov:label": "StereoPep curation pipeline",
       "sc:license": "MIT License"
     }
   ]

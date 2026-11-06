@@ -1,11 +1,55 @@
+# --- Python ---
 __pycache__/
 *.py[cod]
 *.egg-info/
-.env
 .venv/
 venv/
 dist/
 build/
-.DS_Store
 *.ipynb_checkpoints/
 .ipynb_checkpoints/
+
+# --- Secrets and credentials ---
+# Never commit tokens. Load them from the environment instead,
+# the way upload_to_hf.py reads HF_TOKEN.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+.netrc
+id_rsa*
+credentials*
+secrets*
+.hf_token
+.huggingface/
+.aws/
+.ssh/
+
+# --- Cluster / job scripts (these tend to carry hardcoded tokens) ---
+submit.sh
+*.sbatch
+slurm-*.out
+slurm-*.err
+
+# --- Hugging Face publishing (kept local, not part of the public repo) ---
+# Holds the upload/card scripts and DATASET_CARD.md. These are release tooling
+# rather than curation code, and they are the files most likely to end up
+# carrying a token, so they stay out of the published repository.
+HF/
+paper/
+
+# --- Manuscript drafts and generated reports ---
+*.pdf
+!assets/*.pdf
+*_stats.txt
+
+# --- Editor and OS cruft ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~

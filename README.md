@@ -349,11 +349,15 @@ StereoPep-Curation/
 │   ├── train.csv               # 90% stratified training split
 │   ├── val.csv                 # 10% stratified validation split
 │   ├── test.csv                # Held-out test set (independent library)
+│   ├── natural_train.csv       # train.csv with D-Phe ('f') peptides removed
+│   ├── natural_val.csv         # val.csv with D-Phe ('f') peptides removed
+│   ├── natural_test.csv        # test.csv with D-Phe ('f') peptides removed
 │   └── diastereomer_pairs.csv  # D-Phe / L-Phe diastereomer pairs from test set
 │
 ├── data_processing.py          # PSM cleaning + SMILES generation utilities
 ├── merge_data.py               # Library merging and deduplication
 ├── split_data.py               # Stratified train/val split
+├── make_natural_benchmark.py   # Natural-only (no D-Phe) benchmark split
 ├── make_diastereomer_pairs.py  # Diastereomer-pair extraction
 ├── make_point_mutant_pairs.py  # Point-mutant pair extraction
 ├── make_terminal_tag_pairs.py  # Terminal-tag pair extraction
@@ -368,15 +372,21 @@ StereoPep-Curation/
 If you use StereoPep in your research, please cite:
 
 ```bibtex
-@misc{amirabbas_kazeminia_2026,
-	author       = { Amirabbas Kazeminia and Michael Desgagné },
-	title        = { StereoPep (Revision 3848950) },
-	year         = 2026,
-	url          = { https://huggingface.co/datasets/amirka20/StereoPep },
-	doi          = { 10.57967/hf/8658 },
-	publisher    = { Hugging Face }
+@inproceedings{desgagne2026stereopep,
+  title     = {StereoPep: Predicting the Effects of Stereochemical Inversions on
+               Synthetic Peptide Retention Time in Combinatorial Libraries},
+  author    = {Desgagn{\'e}, Michael and Kazeminia, Amirabbas and Kaygisiz, K{\"u}bra
+               and Pentelute, Bradley L. and Zitnik, Marinka},
+  booktitle = {Advances in Neural Information Processing Systems 40 (NeurIPS 2026),
+               Track on Evaluations and Datasets},
+  year      = {2026}
 }
 ```
+
+Michael Desgagné and Amirabbas Kazeminia contributed equally.
+
+If you need to cite the dataset artifact specifically, it is also archived on Hugging Face
+under DOI [10.57967/hf/8658](https://doi.org/10.57967/hf/8658).
 
 ---
 

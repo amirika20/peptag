@@ -289,7 +289,7 @@ def clean_psm(input_path, output_path, method_fn):
        lowercase 'f' so D-Phe ('f') and L-Phe ('F') are distinguishable.
     5. RT → %B conversion; rows outside the gradient window are dropped.
     6. Per-protein deduplication: keep the highest-intensity PSM.
-    7. Write sorted output CSV with columns: Peptide, RT, B, M, Z.
+    7. Write sorted output CSV with columns: Peptide, RT, B, M, Z, Intensity.
     """
     input_path = str(input_path)
 
@@ -360,7 +360,7 @@ def clean_psm(input_path, output_path, method_fn):
 
     # Step 7: write clean output
     df = df.sort_values(by="Protein")
-    df = df[["Peptide", "Retention", "B", "Observed Mass", "Charge"]]
+    df = df[["Peptide", "Retention", "B", "Observed Mass", "Charge", "Intensity"]]
     df = df.rename(columns={"Retention": "RT", "Observed Mass": "M", "Charge": "Z"})
     df.to_csv(output_path, index=False)
     return len(df)
